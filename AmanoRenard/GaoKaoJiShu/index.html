@@ -104,7 +104,7 @@
 			},
 			mounted() {
 				axios.get("http://43.139.143.53:8233/jsct").then(res => this.count = res.data.data)
-				ws = new WebSocket("ws://43.139.143.53:8233/jsws");
+				ws = new WebSocket("wss://43.139.143.53:8233/jsws");
 				ws.onmessage = (res) => {
 					let dataStr = res.data
 					this.current = JSON.parse(dataStr).data
