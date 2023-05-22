@@ -82,7 +82,7 @@
 			</div>
 			
 			<div align="center">
-			<p style="font-size : 30px;"><b>QQ群 & 微信群<br>(如果群满请加群主微信: AmanoRenard 邀请进群)<br/></b><br/><img src="./qq.png" alt="qq" height="400"/><img src="http://43.139.143.53/files/wechat.jpg" alt="wechat" height="400"/></p>
+			<p style="font-size : 30px;"><b>QQ群 & 微信群<br>(如果群满请加群主微信: AmanoRenard 邀请进群)<br/></b><br/><img src="./qq.png" alt="qq" height="400"/><img src="http://43.139.143.53:8233/files/wechat.jpg" alt="wechat" height="400"/></p>
 			<p style="font-size : 30px; font-weight:bold;"><br/>求大佬投喂！</p>
 			<p><img src="../ts.png" alt="ts" width="500"/> </p>
 			<p style="font-size : 24px;">服务器维护一年300多RMB，实在是不易...<br/></p>
@@ -103,8 +103,8 @@
 				}
 			},
 			mounted() {
-				axios.get("http://43.139.143.53/jsct").then(res => this.count = res.data.data)
-				ws = new WebSocket("ws://43.139.143.53/jsws");
+				axios.get("http://43.139.143.53:8233/jsct").then(res => this.count = res.data.data)
+				ws = new WebSocket("ws://43.139.143.53:8233/jsws");
 				ws.onmessage = (res) => {
 					let dataStr = res.data
 					this.current = JSON.parse(dataStr).data
