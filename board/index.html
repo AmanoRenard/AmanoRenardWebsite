@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小工具 | AmanoRenard</title>
+    <style>
+        .btn-small{
+            width: 30px;
+            height: 30px;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="../js/axios/axios.min.js"></script>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="../js/vue/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../js/element-ui/index.css">
+    <!-- 引入组件库 -->
+    <script src="../js/element-ui/index.js"></script>
+    <!-- 剪切板 -->
+    <script src="../js/clipboard.min.js"></script>
+
+
+    <div id="app">
+        <el-card class="box-card">
+            <div style="display: flex; justify-content: space-between;">
+                <div><b>写字板</b> <font color="gray"><i>在线编辑小工具</i></font> </div>
+                <div>
+                    <el-link href="http://43.139.143.53/">进入小聊天</el-link>
+                </div>
+            </div>
+        </el-card>
+
+
+        <el-card class="box-card" style="margin-top: 10px;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px; margin-top: -10px;">
+                <el-button icon="el-icon-document-copy" class="btn-small" data-clipboard-target="#text-input" id="copy-btn" :disabled="textarea==='' ? true : false" circle></el-button>
+                <el-button icon="el-icon-download" class="btn-small" @click="download" :disabled="textarea==='' ? true : false" circle></el-button>
+            </div>
+            <el-input type="textarea" id="text-input" maxlength="8192" @change="onChanged" @blur="autoUpdate" show-word-limit :autosize="{minRows: 8}"
+                placeholder="请输入内容" v-model="textarea">
+            </el-input>
+            <div style="margin-top: 10px;">
+                <el-button type="primary" style="margin-right: 5px;" @click="sendData" plain
+                    :disabled="textarea==='' || autoSave === true ? true : false">保存内容</el-button>
+                <el-button plain @click="_load" style="margin-left: 0px; margin-right: 5px; margin-top: 8px;">刷新文本</el-button>
+                <el-button type="danger" style="margin-left: 0px; margin-top: 8px;" @click="clearData" plain
+                    :disabled="textarea==='' ? true : false">清空内容</el-button>
+                <div style="float: right; margin-top: 15px; margin-bottom: 10px;">
+                    <el-switch v-model="autoSave" active-text="自动保存">
+                    </el-switch>
+                </div>
+            </div>
+        </el-card>
+
+        </div>
+    </div>
+
+    <script>
+
+        var app = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    textarea: '',
+                    autoSave: false,
+                    changed: false
+                }
+            },
+            methods: {
+                sendData() {
+                    let _this = this
+                    let trs = { text: this.textarea }
+                    axios.post("http://43.139.143.53:8081/board/update", trs, {
+                        'Content-Type': "application/json;charset=utf-8"
+                    }).then(resp => {
+                        _this.textarea = resp.data.text
+                        _this.$message({
+                            message: '保存成功',
+                            type: 'success'
+                        });
+                    })
+                    this.changed = false
+                },
+                clearData() {
+                    let _this = this
+                    axios.get("http://43.139.143.53:8081/board/clear").then(resp => {
+                        _this.textarea = ""
+                        this.$message.error('已清空');
+                    })
+                },
+                _load() {
+                    let _this = this
+                    axios.get("http://43.139.143.53:8081/board/load").then(resp => {
+                        _this.textarea = resp.data.text
+                        _this.$message({
+                            message: '同步成功',
+                            type: 'success'
+                        });
+                    })
+                },
+                autoUpdate() {
+                    if (this.autoSave === false || this.changed === false) {
+                        return
+                    }
+                    this.sendData()
+                    this.changed = false
+                },
+                onChanged() {
+                    this.changed = true;
+                },
+                download() {
+                    this.sendData()
+                    window.open('http://43.139.143.53:8081/board/download');
+                }
+            },
+            mounted() {
+                this._load()
+            }
+        })
+
+        new ClipboardJS('#copy-btn').on(
+            'success',
+            (e) => {
+                app.$message({
+                    message: '已复制到剪贴板',
+                    type: 'success'
+                });
+                e.clearSelection();
+            }
+        )
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>技术资料分享 | AmanoRenard</title>
+		<style type="text/css">
+
+			a:link {color:#FFFFCC;}      /* 未访问链接*/
+			a:visited {color:#FFFFCC;}  /* 已访问链接 */
+			a:hover {color:#FFFFCC;}  /* 鼠标移动到链接上 */
+			a:active {color:#FFFFCC;}  /* 鼠标点击时 */
+			body{
+				margin: 0;
+				background-repeat: no-repeat;
+				background-size: cover;
+				background-position: center;
+				background-attachment: fixed;
+				background-image: url(../bg.jpg);
+			}
+			.center-in-center{
+				position: absolute;
+				top: 0%;
+				left: 50%;
+				-webkit-transform: translate(-50%, 0%);
+				-moz-transform: translate(-50%, 0%);
+				-ms-transform: translate(-50%, 0%);
+				-o-transform: translate(-50%, 0%);
+				transform: translate(-50%, 0%);
+				
+				color: white;
+				font-size: 20px;
+				text-shadow: -1.5px 1.5px 0 #000, 1.5px -1.5px 0 #000, 1.5px 1.5px 0 #000, -1.5px -1.5px 0 #000, 1.5px 0px 0 #000, -1.5px 0px 0 #000, 0px -1.5px 0 #000, 0px 1.5px 0 #000;
+			} 
+			
+			    textarea {
+				width: 600px;
+				height: 20px;
+				border: 1px pink solid;
+				/* 不设置轮廓 */
+				outline: none;
+				/* 设置其不能改变长宽 */
+				resize: none;
+			}
+			
+			    li {
+				width: 300px;
+				padding: 5px;
+				background-color: #eee;
+				font-size: 15px;
+				margin: 15px 0;
+			}
+			
+						li a {
+				float: right;
+			}
+
+
+
+		</style>
+	</head>
+	<body>
+		<div class="center-in-center">
+			<div style="font-size : 100px;" align="center">AmanoRenard<br/>技术资料分享</div>
+			<br/>
+			<img src="./keben.png"/ alt="keben" height="400"/>
+			<p style="font-size : 44px;" align="center">↓2022年考试大纲↓</p>
+			<p style="font-size : 22px;" align="center"><a href="http://www.jxeea.cn/art/2022/3/18/art_26671_3891008.html" target="_blank">http://www.jxeea.cn/art/2022/3/18/art_26671_3891008.html</a></br>全程笔试，考试不上机！考试不上机！考试不上机！重要的事情说三遍。</p>
+			<p style="font-size : 44px;" align="center">↓通用技术、信息技术网课视频↓</p>
+			<p style="font-size : 22px;" align="center"><a href="https://www.ixigua.com/home/1626897965393278" target="_blank">https://www.ixigua.com/home/1626897965393278</a></p>
+			<p style="font-size : 44px;" align="center">↓个人整理 通用技术复习提纲↓</p>
+			<p style="font-size : 33px;" align="center"><a href="./江西高考通用技术复习提纲（B站UID：3283605）.pdf" download="./江西高考通用技术复习提纲（B站UID：3283605）.pdf">***点我下载***点我下载***点我下载***</a></p>
+			<p style="font-size : 44px;" align="center">↓其他人整理的资料↓</p>
+			<p style="font-size : 22px;" align="center">这个是别人整理的资料，比较全，但是有些是收费的</p>
+			<p style="font-size : 22px;" align="center"><a href="https://blog.csdn.net/lzksword/article/details/101421954
+			" target="_blank">https://blog.csdn.net/lzksword/article/details/101421954
+			</a></p>
+			<p style="font-size : 44px;" align="center">↓技术教辅 江西专用↓</p>
+			<img src="./jiaofu.png"/ alt="jiaofu" height="400"/>
+			<p style="font-size : 44px;" align="center">↓自学技术如何考高分↓</p>
+			<p style="font-size : 22px;" align="center">
+			<img src="./f1.jpg"/ alt="f1" width="500"/>
+			<img src="./f2.jpg"/ alt="f2" width="500"/>
+			</p>
+		
+			<p style="font-size : 22px;">⠀⠀⠀首先，技术考试不难，不用担心考试时间不够，熟练的话1个小时不到就能做完。但是这并不代表技术可以随便学，因为技术是最好提分的，学技术的收益远大于主科，毕竟最后几个月想提主科的分数是非常困难的。</p>
+			<p style="font-size : 22px;">⠀⠀⠀技术提分方法很简单：刷就完事了。先刷课本、练习册，课本至少刷个3遍；还有把历年的高考技术卷子都刷一遍（UP主正在收集中，几天后发到这里），可以了解考点和题型，错题要记录下来。</p>
+			<p style="font-size : 20px;" align="center">下定决心考专科的，可以用理(文)综课的时间来学习技术。<br/>建议学习时间分配：50%主科，50%技术。</p>
+			<p style="font-size : 14px;" align="right"><a href="./ZhuanShengBen.html" target="_blank">***有考本科想法的点我***</a></p><br/>
+			
+			<div>
+			<textarea></textarea>
+    <button>发布</button>
+    <ul></ul>
+    <script>
+        //1、获取元素
+        var txt = document.querySelector("textarea");
+        var btn = document.querySelector("button");
+        var ul = document.querySelector("ul");
+        //2、给button绑定点击事件
+        btn.onclick = function () {
+            if (txt.value == "") {//当文本框中没有文字时，提示
+                alert("您没有输入内容")
+            } else {
+                //创建元素li作为留言区
+                var li = document.createElement("li");
+                //将文本框中的内容放到li中,a标签中href中的内容代表什么都不执行
+                li.innerHTML = txt.value + "<a href='javascript:;'>删除</a>"
+                txt.value = "";//添加之后文本框的内容清空
+                //将留言添加到ul中，而且在最上方
+                ul.insertBefore(li, ul.children[0]);
+                //当点击删除时删除ul中的li
+                var as = document.querySelectorAll("a");
+                //循环给每个删除绑定事件
+                for (var i = 0; i < as.length; i++) {
+                    as[i].onclick = function () {
+                        //删除当前a标签所在位置的父节点li
+                        ul.removeChild(this.parentNode);
+                    }
+                }
+            }
+        }
+    </script>
+			</div>
+			
+			<div align="center">
+			<p style="font-size : 30px;"><br/><br/>🌹求大佬投食🌹</p>
+			<img src="../ts.jpg"/ alt="ts" height="420"/>
+			<p style="font-size : 30px;">微信：AmanoRenard<br/>QQ：1320128045<br/></p><p style="font-size : 25px;" align="center"><a href="../index.html">返回主页</a></p>
+			</div>
+			<p style="font-size : 12px;" align="center">CopyRight©2022 AmanoRenard All Rights Reserved</p>
+			
+		</div>
+	</body>
+</html>

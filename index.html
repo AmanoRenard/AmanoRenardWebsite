@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>小聊天 | AmanoRenard</title>
+</head>
+<body>
+<!-- Axios -->
+<script src="js/axios/axios.min.js"></script>
+<!-- Vue开发环境版本 -->
+<script src="js/vue/vue.js"></script>
+<!-- ElementUI样式 -->
+<link rel="stylesheet" href="js/element-ui/index.css">
+<!-- ElementUI组件库 -->
+<script src="js/element-ui/index.js"></script>
+
+<div id="app" v-loading="isLoading">
+    <el-card class="box-card">
+        <div slot="header" class="clearfix">
+            <div style="display:flex; justify-content: space-between">
+                <div><b>小聊天</b> <font color="gray"><i>在线用户 {{users.length}}人</i></font></div>
+                <div><el-link href="http://43.139.143.53/board" type="primary">进入写字板</el-link></div>
+            </div>
+        </div>
+        <span v-for="user in users" :key="user">
+            <el-tag style="margin-right: 7px">{{user}}</el-tag>
+        </span>
+    </el-card>
+    <el-card class="box-card" style="height: 80vh">
+        <div slot="header" class="clearfix">
+            <span>聊天区域 {{formInline.user}}</span>
+        </div>
+        <div>
+                <div style="display:flex; justify-content: space-between; margin-bottom: 10px">
+                    <el-input
+                            type="textarea"
+                            :autosize="{ minRows: 1, maxRows: 4}"
+                            placeholder="请输入内容"
+                            v-model="formInline.text"
+                            @keydown.native="enterSubmit"
+                    style="width: 80%">
+                    </el-input>
+                    <el-button type="primary" @click="onSubmit" :disabled="formInline.text === '' || formInline.text === undefined" style="width: 16%;">发送</el-button>
+
+                </div>
+        </div>
+        <div style="overflow:auto; height: 60vh;" id="box">
+            <el-card v-for="text in texts" :key="text" class="box-card" style="margin-bottom: 8px;">
+                {{text}}
+            </el-card>
+        </div>
+    </el-card>
+</div>
+
+<script>
+    let webSocket = null
+    axios.defaults.withCredentials = true
+    const app =new Vue({
+        el : "#app",
+        data() {
+            return {
+                users : [],
+                texts: [],
+                formInline: {
+                    user : "",
+                    text : ""
+                },
+                isLoading: true
+            }
+        },
+        methods: {
+            enterSubmit(event) {
+                if (event.keyCode===13 && this.formInline.text.trim() !== "" && this.formInline.text !== undefined) {
+                    setTimeout(() => {
+                        this.onSubmit();
+                    }, 50)
+                }
+            },
+            onSubmit() {
+                if (this.formInline.text.trim() === "" || this.formInline.text === undefined ) {
+                    this.$message.error("发送消息不能为空！")
+                    return
+                }
+                webSocket.send(this.formInline.text)
+                this.formInline.text = ""
+            },
+            handlerUsername() {
+                this.$prompt('', '起一个名字', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    center: true,
+                    inputPattern: /^\S{1,10}$/,
+                    inputErrorMessage: '昵称不能为空或者超过10位！'
+                }).then(({ value }) => {
+                    axios.post("http://43.139.143.53/userInfo", {user : value}).then((res) => {
+                        this.$message.success("欢迎您，"+res.data.data.user)
+                        this.formInline.user = res.data.data.user
+                        this.new_ws()
+                        this.isLoading = false
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '请起一个名字'
+                    });
+                    this.handlerUsername()
+                });
+            },
+            new_ws() {
+                webSocket = new WebSocket("ws://43.139.143.53/chat")
+                // webSocket.onopen = function () {
+                //
+                // }
+                let _this = this
+                webSocket.onmessage = function (res) {
+                    let dataStr = res.data
+                    let data = JSON.parse(dataStr);
+                    if (data.msg === "users") {
+                        _this.users = data.data
+                    } else if(data.msg === "init") {
+                        _this.texts = data.data
+                    } else {
+                        // if (data.data[0] === "我发送了一条渲染文本：")
+                        // document.getElementById("box").innerHTML = "<div class=\"el-card box-card is-always-shadow\"><div class=\"el-card__body\">" + data.data + "</div></div>" + document.getElementById("box").innerHTML
+                        _this.texts.unshift(data.data)
+                    }
+                }
+                webSocket.onclose = function () {
+                    _this.texts.unshift("系统提示：您已掉线！")
+                }
+            }
+        },
+        mounted() {
+            axios.get("http://43.139.143.53/userInfo").then((res) => {
+                if (res.data.code === 1) {
+                    this.formInline.user = res.data.data.user
+                    this.$message.success("登陆成功")
+                    this.new_ws()
+                    this.isLoading = false
+                    document.onkeydown = () => {
+
+                    }
+                } else {
+                    this.handlerUsername()
+                }
+            })
+
+        }
+    })
+</script>
+</body>
+
+</html>
